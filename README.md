@@ -1,6 +1,22 @@
+
+<p align="center">
+  <img src="client/public/srm_logo.svg" alt="Campus Connect Logo" width="120"/>
+</p>
+
 # Campus Connect 🎓
 
-**Transforming campus life by creating a unified platform that connects students, simplifies coordination, and makes collaborative experiences effortless.**
+<p align="center">
+  <b>Transforming campus life with a unified platform for students to connect, collaborate, and thrive.</b>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build Status"/>
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"/>
+  <img src="https://img.shields.io/badge/made%20with-React-blue" alt="React"/>
+</p>
+
+
+---
 
 ## 🌟 Our Mission
 
@@ -13,58 +29,55 @@ Campus Connect builds a more connected, supportive, and efficient campus communi
 - 💬 Connect with fellow students instantly
 - 📋 Manage lost & found items
 
+
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 16+
-- npm or yarn
-- MongoDB database
-- Clerk account (for authentication)
 
-### Quick Setup
+- [Node.js 16+](https://nodejs.org/)
+- npm or yarn
+- [MongoDB](https://www.mongodb.com/) database
+- [Clerk](https://clerk.com/) account (for authentication)
+
+### Quick Start
 
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd campus-connect-main
+   cd CampusConnect
    ```
 
-2. **Install client dependencies**
+2. **Install dependencies**
    ```bash
-   cd client
-   npm install
+   cd client && npm install
+   cd ../server && npm install
    ```
 
-3. **Install server dependencies**
+3. **Configure environment variables**
    ```bash
-   cd ../server
-   npm install
-   ```
-
-4. **Configure environment variables**
-   ```bash
-   cd server
    cp .env.example .env
-   # Add your MongoDB connection string and Clerk API keys
+   # Edit .env and add your MongoDB URI and Clerk API keys
    ```
 
-5. **Start the development servers**
-   
-   **Terminal 1 - Backend Server:**
-   ```bash
-   cd server
-   npm start
-   ```
-   
-   **Terminal 2 - Frontend Client:**
-   ```bash
-   cd client
-   npm run dev
-   ```
+4. **Start the development servers**
 
-6. **Access the application**
-   - Frontend: http://localhost:5173
-   - Backend API: http://localhost:5000
+   - **Backend:**
+     ```bash
+     cd server
+     npm start
+     ```
+   - **Frontend:** (in a new terminal)
+     ```bash
+     cd client
+     npm run dev
+     ```
+
+5. **Access the app:**
+   - Frontend: [http://localhost:5173](http://localhost:5173)
+   - Backend API: [http://localhost:5000](http://localhost:5000)
+
+
+---
 
 ## 🏗️ Project Structure
 
@@ -74,7 +87,7 @@ campus-connect-main/
 │   ├── src/
 │   │   ├── components/     # Reusable UI components
 │   │   ├── pages/         # Page components
-│   │   ├── firebase.js    # Firebase configuration
+│   │   ├── api.js        # API utilities
 │   │   └── ...
 │   └── public/            # Static assets
 ├── server/                # Node.js backend server
@@ -83,6 +96,9 @@ campus-connect-main/
 │   └── .env.example      # Environment variables template
 └── README.md             # This file
 ```
+
+
+---
 
 ## 🛠️ Tech Stack
 
@@ -102,6 +118,9 @@ campus-connect-main/
 - **Clerk SDK** - Server-side authentication
 - **Hugging Face API** - AI-powered profanity detection
 
+
+---
+
 ## ✨ Features
 
 ### 👤 User Features
@@ -119,12 +138,18 @@ campus-connect-main/
 - **Lost & Found** - Report and find lost items
 - **Roommate Matching** - Find compatible roommates
 
+
+---
+
 ## 🔐 Security Features
 
 - University email domain validation (@srmap.edu.in)
 - AI-powered profanity detection in chat
 - Secure Clerk authentication
 - Request validation and sanitization
+
+
+---
 
 ## 🎯 Recent Optimizations
 
@@ -157,6 +182,9 @@ campus-connect-main/
 - Created proper environment configuration
 - Updated documentation
 
+
+---
+
 ## 📝 Environment Variables
 
 Create a `.env` file in the server directory:
@@ -175,6 +203,9 @@ HF_API_KEY=your_hugging_face_api_key_here
 
 **Note:** The application runs without the API key, but profanity detection will be disabled.
 
+
+---
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -183,10 +214,22 @@ HF_API_KEY=your_hugging_face_api_key_here
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License.
 
 ---
 
-**Built with ❤️ by students, for students - Campus Connect is more than an app. It's your campus, connected.**
+
+---
+
+## 📬 Contact & Support
+
+For questions, suggestions, or support, please open an [issue](https://github.com/suman2807/CampusConnect/issues) or contact the maintainer at [your-email@domain.com].
+
+---
+
+<p align="center"><b>Built with ❤️ by students, for students — Campus Connect is more than an app. It's your campus, connected.</b></p>
