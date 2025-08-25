@@ -19,6 +19,7 @@
 
 Campus Connect is a unified platform designed to simplify student life by connecting peers, organizing activities, and streamlining campus collaboration. Whether you want to find a roommate, join a sports team, or manage lost & found, Campus Connect brings it all together.
 ---
+![img_alt](https://github.com/suman2807/CampusConnect/blob/main/Screenshot%202025-08-26%20023919.png?raw=true)
 
 ## 🗂️ Project Structure
 
