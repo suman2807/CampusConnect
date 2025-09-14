@@ -1,13 +1,11 @@
 import axios from 'axios';
 
-// Use environment variable for API base URL, fallback based on environment
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
-  (import.meta.env.PROD ? `${window.location.origin}/api` : 'http://localhost:3001/api');
+// Use environment variable for API base URL, fallback to localhost for development
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -15,23 +13,10 @@ const api = axios.create({
 
 // Add request interceptor for debugging in development
 if (import.meta.env.DEV) {
-  console.log('API Base URL:', API_BASE_URL);
-  
   api.interceptors.request.use((config) => {
     console.log('API Request:', config.method?.toUpperCase(), config.url);
     return config;
   });
-
-  api.interceptors.response.use(
-    (response) => {
-      console.log('API Response:', response.status, response.config.url);
-      return response;
-    },
-    (error) => {
-      console.error('API Error:', error.response?.status, error.config.url, error.message);
-      return Promise.reject(error);
-    }
-  );
 }
 
 

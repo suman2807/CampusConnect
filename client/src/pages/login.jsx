@@ -1,17 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaUserShield, FaSpinner } from "react-icons/fa";
 import { isUniversityEmail } from "../clerk";
 import { userAPI } from "../api";
 
 function Login() {
   const navigate = useNavigate();
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn, user, isLoaded } = useUser();
   const { openSignIn } = useClerk();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
 
   useEffect(() => {
-    if (isSignedIn && user) {
+    if (isLoaded && isSignedIn && user) {
       // Check if email is valid university email
       if (!isUniversityEmail(user.primaryEmailAddress?.emailAddress)) {
         alert("Please use your university email (@srmap.edu.in) to sign in.");
@@ -21,6 +23,7 @@ function Login() {
       // Create or update user in our database
       const createUser = async () => {
         try {
+          setIsCreatingUser(true);
           // Create or update user and redirect to home
           await userAPI.createOrUpdateUser({
             clerkId: user.id,
@@ -33,15 +36,18 @@ function Login() {
         } catch (error) {
           console.error('Error creating/updating user:', error);
           navigate("/");
+        } finally {
+          setIsCreatingUser(false);
         }
       };
 
       createUser();
     }
-  }, [isSignedIn, user, navigate]);
+  }, [isLoaded, isSignedIn, user, navigate]);
 
   const handleSignIn = async () => {
     try {
+      setIsLoading(true);
       // Use Clerk's openSignIn modal for authentication
       await openSignIn({
         afterSignInUrl: '/',
@@ -60,8 +66,40 @@ function Login() {
     } catch (error) {
       console.error("Error opening sign in modal:", error);
       alert("Unable to open sign-in. Please try again or check your connection.");
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const handleAdminLogin = () => {
+    navigate("/admin/login");
+  };
+
+  // Show loading screen while auth is loading or user is being created
+  if (!isLoaded || isCreatingUser) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg space-y-6">
+          <div className="flex justify-center">
+            <img
+              src="/logo.png"
+              alt="University Logo"
+              className="h-32 w-32 object-contain mb-4"
+            />
+          </div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5e7b34] mx-auto mb-4"></div>
+            <h2 className="text-xl font-semibold text-gray-700">
+              {!isLoaded ? "Loading..." : "Setting up your account..."}
+            </h2>
+            <p className="text-gray-500 mt-2">
+              {!isLoaded ? "Please wait while we load the application" : "This will only take a moment"}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
@@ -80,10 +118,33 @@ function Login() {
         {/* Student Login Button */}
         <button
           onClick={handleSignIn}
-          className="w-full flex items-center justify-center gap-3 rounded-lg bg-[#5e7b34] px-4 py-3 text-white text-lg font-semibold hover:bg-[#49642a] transition duration-300"
+          disabled={isLoading}
+          className={`w-full flex items-center justify-center gap-3 rounded-lg px-4 py-3 text-white text-lg font-semibold transition duration-300 ${
+            isLoading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-[#5e7b34] hover:bg-[#49642a]"
+          }`}
         >
-          <FaUser className="text-white" />
-          Student Login
+          {isLoading ? (
+            <FaSpinner className="animate-spin" />
+          ) : (
+            <FaUser />
+          )}
+          {isLoading ? "Opening Sign In..." : "Student Login"}
+        </button>
+
+        {/* Admin Login Button */}
+        <button
+          onClick={handleAdminLogin}
+          disabled={isLoading}
+          className={`w-full flex items-center justify-center gap-3 rounded-lg px-4 py-3 text-white text-lg font-semibold transition duration-300 ${
+            isLoading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-[#5e7b34] hover:bg-[#49642a]"
+          }`}
+        >
+          <FaUserShield />
+          Admin Login
         </button>
       </div>
     </div>
