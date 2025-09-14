@@ -14,6 +14,10 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 const LandingPage = () => {
   const [isVisible, setIsVisible] = useState(false);
 
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   const features = [
     {
       icon: <EmojiEventsOutlinedIcon style={{ fontSize: "60px" }} />,
@@ -76,7 +80,7 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 fade-in">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#4d6b2c] via-[#5e7b34] to-[#70703c] text-white">
         <div className="absolute inset-0 bg-black opacity-10"></div>

@@ -384,6 +384,79 @@ router.post('/feedback', verifyClerkUser, async (req, res) => {
     
     await feedback.save();
     res.status(201).json({ message: 'Feedback submitted successfully' });
+// Admin middleware
+const verifyAdmin = (req, res, next) => {
+  const ADMIN_EMAILS = ['suman_saurabh@srmap.edu.in'];
+  
+  if (!req.user || !req.user.email || !ADMIN_EMAILS.includes(req.user.email)) {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+  
+  next();
+};
+
+// Admin Routes
+router.get('/admin/stats', verifyClerkUser, verifyAdmin, async (req, res) => {
+  try {
+    const totalRequests = await Request.countDocuments();
+    const activeRequests = await Request.countDocuments({ status: 'open' });
+    const completedRequests = await Request.countDocuments({ status: 'completed' });
+    const totalUsers = await User.countDocuments();
+    const totalMessages = await Message.countDocuments();
+    const totalFeedback = await Feedback.countDocuments();
+    
+    res.json({
+      totalRequests,
+      activeRequests,
+      completedRequests,
+      totalUsers,
+      totalMessages,
+      totalFeedback
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/admin/requests', verifyClerkUser, verifyAdmin, async (req, res) => {
+  try {
+    const requests = await Request.find()
+      .populate('createdBy', 'fullName email')
+      .sort({ createdAt: -1 });
+    
+    res.json(requests);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/admin/users', verifyClerkUser, verifyAdmin, async (req, res) => {
+  try {
+    const users = await User.find()
+      .select('fullName email createdAt')
+      .sort({ createdAt: -1 });
+    
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.delete('/admin/requests/:id', verifyClerkUser, verifyAdmin, async (req, res) => {
+  try {
+    const request = await Request.findById(req.params.id);
+    
+    if (!request) {
+      return res.status(404).json({ error: 'Request not found' });
+    }
+    
+    await Request.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Request deleted successfully by admin' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

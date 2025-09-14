@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+// Use environment variable for API base URL, fallback to localhost for development
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -10,6 +11,13 @@ const api = axios.create({
   },
 });
 
+// Add request interceptor for debugging in development
+if (import.meta.env.DEV) {
+  api.interceptors.request.use((config) => {
+    console.log('API Request:', config.method?.toUpperCase(), config.url);
+    return config;
+  });
+}
 
 
 // User API functions
@@ -99,5 +107,24 @@ export const chatAPI = {
 export const feedbackAPI = {
   submitFeedback: async (userData, issueFeedback, improvementFeedback) => {
     return api.post('/feedback', { issueFeedback, improvementFeedback, user: userData });
+  },
+};
+
+// Admin API functions
+export const adminAPI = {
+  getStats: async (userData) => {
+    return api.get('/admin/stats', { data: { user: userData } });
+  },
+  
+  getAllRequests: async (userData) => {
+    return api.get('/admin/requests', { data: { user: userData } });
+  },
+  
+  getAllUsers: async (userData) => {
+    return api.get('/admin/users', { data: { user: userData } });
+  },
+  
+  deleteRequest: async (userData, requestId) => {
+    return api.delete(`/admin/requests/${requestId}`, { data: { user: userData } });
   },
 };

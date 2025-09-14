@@ -5,12 +5,14 @@ const Footer = () => {
         <p className="text-sm text-center">
           Feel free to reach out if you are having any trouble or need assistance by filling out this feedback form!
         </p>
-        <button
-          onClick={() => (window.location.href = "/feedback")}
-          className="bg-white text-[#4d6b2c] font-bold py-2 px-4 rounded shadow hover:bg-gray-100 transition-transform transform hover:scale-105"
-        >
-          Feedback
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => (window.location.href = "/feedback")}
+            className="bg-white text-[#4d6b2c] font-bold py-2 px-4 rounded shadow hover:bg-gray-100 transition-transform transform hover:scale-105"
+          >
+            Feedback
+          </button>
+        </div>
       </div>
     </footer>
   );

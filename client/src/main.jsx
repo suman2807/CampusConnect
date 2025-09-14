@@ -8,26 +8,27 @@ import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import { ClerkProvider } from '@clerk/clerk-react';
 import { clerkConfig } from './clerk';
 
-function AppWrapper() {
+const AppWrapper = () => {
   return (
     <Router>
       <ConditionalWrapper />
     </Router>
   );
-}
+};
 
-function ConditionalWrapper() {
+const ConditionalWrapper = () => {
   const location = useLocation();
-  const showFooter = location.pathname !== "/login" && location.pathname !== "/chat";
+  const showFooter = location.pathname !== "/login" && location.pathname !== "/chat" && !location.pathname.startsWith("/admin");
+  const showNavbar = !location.pathname.startsWith("/admin");
 
   return (
     <>
-      <Navbar />
+      {showNavbar && <Navbar />}
       <App />
       {showFooter && <Footer />}
     </>
   );
-}
+};
 
 // Wrap the entire app with ClerkProvider and Router
 createRoot(document.getElementById("root")).render(

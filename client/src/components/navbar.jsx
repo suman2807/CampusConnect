@@ -6,18 +6,39 @@ import { Link } from "react-router-dom";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 function Navbar() {
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn, user, isLoaded } = useUser();
   const { signOut } = useClerk();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const handleSignOut = async () => {
     try {
+      setIsSigningOut(true);
       await signOut();
     } catch (error) {
       console.error("Error signing out:", error);
+    } finally {
+      setIsSigningOut(false);
     }
   };
+
+  // Show skeleton loader while auth is loading
+  if (!isLoaded) {
+    return (
+      <nav className="flex items-center justify-between bg-[#4d6b2c] px-6 py-4 text-white">
+        <Link to="/">
+          <img src="/srmaplogo.png" alt="SRM AP Logo" className="h-12 object-contain" />
+        </Link>
+        
+        <div className="flex items-center space-x-4">
+          <div className="animate-pulse">
+            <div className="h-10 w-20 bg-green-700 rounded"></div>
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="flex items-center justify-between bg-[#4d6b2c] px-6 py-4 text-white">
@@ -67,9 +88,14 @@ function Navbar() {
             </button>
             <button
               onClick={handleSignOut}
-              className="rounded bg-[#70703c] px-4 py-2 text-sm font-semibold hover:bg-[#5c5c31]"
+              disabled={isSigningOut}
+              className={`rounded px-4 py-2 text-sm font-semibold transition-colors ${
+                isSigningOut
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-[#70703c] hover:bg-[#5c5c31]"
+              }`}
             >
-              Sign Out
+              {isSigningOut ? "Signing Out..." : "Sign Out"}
             </button>
           </div>
         ) : (
