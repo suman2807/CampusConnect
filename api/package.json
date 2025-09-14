@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "dependencies": {
+    "mongoose": "^8.0.0",
+    "axios": "^1.6.0"
+  }
+}
