@@ -21,7 +21,7 @@ import RequestDetailModal from "../components/RequestDetailModal";
 import LoadingSkeleton from "../components/LoadingSkeleton";
 
 const Home = () => {
-  const { isSignedIn, user, isLoaded } = useUser();
+  const { isSignedIn, user } = useUser();
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState("");
   const [requests, setRequests] = useState([]); // Stores all requests
@@ -34,12 +34,13 @@ const Home = () => {
 
   useEffect(() => {
     const fetchRequests = async () => {
-      if (!isLoaded || !isSignedIn) {
+      if (!isSignedIn) {
         setLoading(false);
         return;
       }
       
       try {
+        setLoading(true);
         const response = await requestAPI.getAllRequests();
         setRequests(response.data || response || []);
       } catch (error) {
@@ -51,7 +52,7 @@ const Home = () => {
     };
 
     fetchRequests();
-  }, [isLoaded, isSignedIn]);
+  }, [isSignedIn]);
 
   const handleButtonClick = (label) => {
     setSelectedRequest(label);
@@ -240,12 +241,8 @@ const Home = () => {
     }
   };
 
-  // Handle loading and authentication states properly
-  if (!isLoaded || loading) {
-    return <LoadingSkeleton />;
-  }
-
-  if (!isSignedIn || !user) {
+  // Simple test to see if component is rendering
+  if (!isSignedIn) {
     return <LandingPage />;
   }
 
@@ -253,9 +250,10 @@ const Home = () => {
   const activeRequests = requests.filter((request) => request.createdBy?.clerkId !== user?.id);
 
   return (
-    <div className="flex flex-col min-h-screen fade-in">
-      {/* Dashboard for authenticated users */}
-      <div className="text-center mt-7 flex-grow">
+    <div className="flex flex-col min-h-screen">
+      {isSignedIn && user ? (
+        // Dashboard for authenticated users
+        <div className="text-center mt-7 flex-grow">
           <div className="text-center px-4">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
               <span className="text-black">Welcome, </span>
@@ -367,6 +365,9 @@ const Home = () => {
             )}
           </div>
         </div>
+      ) : (
+        <LandingPage />
+      )}
 
       {/* Render the appropriate form based on selected request type */}
       {sidebarVisible && (
